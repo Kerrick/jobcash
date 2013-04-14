@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+gem "rake", "~>10.0"
+gem "bourbon", "~>3.1"
+gem "listen", "~>0.7"
+gem "rb-inotify", "~>0.9"
+gem "coffee-script", "~>2.2"
+gem "rack", "~>1.5"
+gem "rack-rewrite", "~>1.3"

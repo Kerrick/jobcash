@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Jobcash</title>
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+
+    <script type="text/x-handlebars">
+      <h1>{{#linkTo 'index'}}{{App.NAME}}{{/linkTo}}</h1>
+      <p>{{App.NAME}} v{{App.VERSION}}</p>
+      {{outlet}}
+    </script>
+
+    <script src="/vendor/jquery.js"></script>
+    <script src="/vendor/handlebars.js"></script>
+    <script src="/vendor/ember.js"></script>
+    <script src="/app.js"></script>
+
+  </body>
+</html>
