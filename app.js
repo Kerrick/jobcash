@@ -47,7 +47,9 @@ utils.buildMatrixURI = function(arr) {
   arr.forEach(function(obj) {
     for (var key in obj) {
       value = obj[key];
-      str += key + '=' + value + ';'
+      str += key;
+      if (value !== undefined) { str += '=' + value; }
+      str += ';';
     }
     str = utils.chomp(str, ';') + '&'
   });
