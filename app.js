@@ -73,14 +73,11 @@ utils.buildMatrixURI = function(arr) {
  *          //=> "hello"
  */
 utils.chomp = function(wholeString, chompString) {
-  if (arguments.length < 2) {
-    chompString = "\n"
-  }
-  if (wholeString.slice(-1 * chompString.length) === chompString) {
-    return wholeString.slice(0, -1 * chompString.length);
-  } else {
-    return wholeString;
-  }
+  var negLength;
+  if (arguments.length < 2) { chompString = "\n"; }
+  negChLength = -1 * chompString.length;
+  if (wholeString.slice(negChLength) !== chompString) { return wholeString; }
+  return wholeString.slice(0, negChLength);
 }
 
 App.Router = Ember.Router.extend({
