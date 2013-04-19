@@ -86,13 +86,29 @@ App.Router = Ember.Router.extend({
 
 App.Router.map(function() {
   this.route('comparison', { path: '/compare/:jobs' });
+  this.route('job', { path: '/job/:stats' });
+});
+
+App.Job = Ember.Object.extend({
+  salary: 0,
+  '401k': 0.00,
+  stateTax: 0.00
+});
+
+App.JobRoute = Ember.Route.extend({
+  model: function(params) {
+    var job;
+    job = utils.parseMatrixURI(params.stats)[0];
+    console.log(job);
+    return job;
+  }
 });
 
 App.ComparisonRoute = Ember.Route.extend({
   model: function(params) {
     jobs = [];
     utils.parseMatrixURI(params.jobs).forEach(function(job) {
-      jobs.push(job); // Actually, push a new Job.
+      jobs.push( App.Job.create(job) );
     });
     console.log(jobs);
     return jobs;
@@ -101,3 +117,4 @@ App.ComparisonRoute = Ember.Route.extend({
     return { jobs: utils.buildMatrixURI(model) };
   }
 });
+
