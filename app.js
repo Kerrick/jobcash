@@ -98,11 +98,7 @@ App.Router.map(function() {
   this.route('job', { path: '/job/:stats' });
 });
 
-App.Job = Ember.Object.extend({
-  salary: 0,
-  '401k': 0.00,
-  stateTax: 0.00
-});
+App.Job = Ember.Object.extend();
 
 App.JobRoute = Ember.Route.extend({
   model: function(params) {
@@ -131,5 +127,9 @@ App.ComparisonRoute = Ember.Route.extend({
   serialize: function(model) {
     return { jobs: utils.buildMatrixURI(model) };
   }
+});
+
+App.ComparisonController = Ember.ArrayController.extend({
+  itemController: 'job'
 });
 
