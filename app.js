@@ -4,6 +4,15 @@ App = Ember.Application.create({
   LOG_TRANSITIONS: true
 });
 
+Ember.Application.initializer({
+  name: 'versions',
+  initialize: function() {
+    Ember.debug('Accounting.VERSION : ' + accounting.version);
+    Ember.debug(App.NAME + '.VERSION : ' + App.VERSION);
+    Ember.debug('-------------------------------');
+  }
+});
+
 utils = function(){ return true };
 
 /*
@@ -102,6 +111,12 @@ App.JobRoute = Ember.Route.extend({
     console.log(job);
     return job;
   }
+});
+
+App.JobController = Ember.ObjectController.extend({
+  salary: function() {
+    return accounting.formatMoney(this.get('content.salary'));
+  }.property('content.salary')
 });
 
 App.ComparisonRoute = Ember.Route.extend({
