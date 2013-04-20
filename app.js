@@ -106,10 +106,10 @@ App.Job = Ember.Object.extend();
 
 App.JobRoute = Ember.Route.extend({
   model: function(params) {
-    var job;
-    job = utils.parseMatrixURI(params.stats)[0];
-    console.log(job);
-    return job;
+    return utils.parseMatrixURI(params.stats)[0];
+  },
+  serialize: function(model) {
+    return { stats: utils.buildMatrixURI([model]) };
   }
 });
 
@@ -121,11 +121,10 @@ App.JobController = Ember.ObjectController.extend({
 
 App.ComparisonRoute = Ember.Route.extend({
   model: function(params) {
-    jobs = [];
+    var jobs = [];
     utils.parseMatrixURI(params.jobs).forEach(function(job) {
       jobs.push( App.Job.create(job) );
     });
-    console.log(jobs);
     return jobs;
   },
   serialize: function(model) {

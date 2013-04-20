@@ -31,7 +31,7 @@
         <tbody>
         {{#each controller}}
           <tr>
-            <th scope="row">{{title}}</th>
+            <th scope="row">{{#linkTo job this}}{{title}}{{/linkTo}}</th>
             <td>{{salary}}</td>
             <td>{{401k}}</td>
           </tr>
