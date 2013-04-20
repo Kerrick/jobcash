@@ -3,8 +3,16 @@ describe('The app utilities', function() {
     matrixString = 'red=ted;blue=2;orange&apple=pie;starfruit;orange=marmalade';
     matrixArray = [{red: 'ted', blue: 2, orange: undefined}, {apple: 'pie', starfruit: undefined, orange: 'marmalade'}]
   
-    it('can serialize an array of objects into a matrix URI string', function() {
-      expect(utils.buildMatrixURI(matrixArray)).toBe(matrixString);
+    it('returns an empty string when called with no arguments', function() {
+      expect(utils.buildMatrixURI()).toBe('');
+    });
+
+    it('can serialize a single object inta a matrix URI string', function() {
+      expect(utils.buildMatrixURI(matrixArray[0])).toBe(matrixString.split('&')[0]);
+    });
+
+    it('can serialize multiple objects into a matrix URI string', function() {
+      expect(utils.buildMatrixURI.apply(null, matrixArray)).toBe(matrixString);
     });
 
     it('can deserialize a matrix URI string from an array of objects', function() {

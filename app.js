@@ -46,15 +46,23 @@ utils.parseMatrixURI = function(uri) {
 
 /*
  * Builds a segment of a Matrix URI from an array of objects.
- * @param   {Array}   arr   An array of objects with keys and values
+ * @param   {Object}   ...  One or more objects with keys and values
  * @return  {String}        The Matrix URI segment that was built
  * @method
  * @example                 Using utils.parseMatrixURI
- *          utils.parseMatrixURI([{one: 'two', three: 'four'}, {five: 'six', seven: 'eight'}]);
+ *          utils.parseMatrixURI({one: 'two', three: 'four'}, {five: 'six', seven: 'eight'});
  *          //=> 'one=two;three=four&five=six;seven=eight'
  */
-utils.buildMatrixURI = function(arr) {
-  str = ''
+utils.buildMatrixURI = function() {
+  var arr, str;
+  if (arguments.length === 0) {
+    return '';
+  } else if (arguments.length === 1) {
+    arr = [arguments[0]];
+  } else {
+    arr = Array.prototype.slice.call(arguments);
+  }
+  str = '';
   arr.forEach(function(obj) {
     for (var key in obj) {
       value = obj[key];
@@ -109,7 +117,7 @@ App.JobRoute = Ember.Route.extend({
     return utils.parseMatrixURI(params.stats)[0];
   },
   serialize: function(model) {
-    return { stats: utils.buildMatrixURI([model]) };
+    return { stats: utils.buildMatrixURI(model) };
   }
 });
 
@@ -128,7 +136,7 @@ App.ComparisonRoute = Ember.Route.extend({
     return jobs;
   },
   serialize: function(model) {
-    return { jobs: utils.buildMatrixURI(model) };
+    return { jobs: utils.buildMatrixURI.apply(model) };
   }
 });
 
