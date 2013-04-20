@@ -33,9 +33,11 @@ utils.parseMatrixURI = function(uri) {
     pairs = part.split(';');
     params = {};
     pairs.forEach(function(pair) {
-      var keyValue;
-      keyValue = pair.split('=');
-      params[keyValue[0]] = keyValue[1];
+      var split, value;
+      split = pair.split('=');
+      value = split[1];
+      if (!isNaN(value)) { value = +value; }
+      params[split[0]] = value;
     });
     matrices.push(params);
   });
@@ -56,9 +58,11 @@ utils.buildMatrixURI = function(arr) {
   arr.forEach(function(obj) {
     for (var key in obj) {
       value = obj[key];
-      str += key;
-      if (value !== undefined) { str += '=' + value; }
-      str += ';';
+      if (typeof value === 'string' || typeof value === 'number') {
+        str += key + '=' + value.toString() + ';';
+      } else if (typeof value === 'undefined') {
+        str += key + ';';
+      }
     }
     str = utils.chomp(str, ';') + '&'
   });

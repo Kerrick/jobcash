@@ -1,7 +1,7 @@
 describe('The app utilities', function() {
   describe('The Matrix URI utility', function() {
-    matrixString = 'red=ted;blue=sprue;orange&apple=pie;starfruit;orange=marmalade';
-    matrixArray = [{red: 'ted', blue: 'sprue', orange: undefined}, {apple: 'pie', starfruit: undefined, orange: 'marmalade'}]
+    matrixString = 'red=ted;blue=2;orange&apple=pie;starfruit;orange=marmalade';
+    matrixArray = [{red: 'ted', blue: 2, orange: undefined}, {apple: 'pie', starfruit: undefined, orange: 'marmalade'}]
   
     it('can serialize an array of objects into a matrix URI string', function() {
       expect(utils.buildMatrixURI(matrixArray)).toBe(matrixString);
