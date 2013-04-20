@@ -1,7 +1,14 @@
+/*jshint globalstrict:true */
+/*global jasmine:false, spyOn:false, it:false, xit:false, expect:false, runs:false, waits:false, waitsFor:false, beforeEach:false, afterEach:false, describe:false, xdescribe:false, */
+/*global utils:false */
+
+'use strict';
+
 describe('The app utilities', function() {
   describe('The Matrix URI utility', function() {
+    var matrixString, matrixArray;
     matrixString = 'red=ted;blue=2;orange&apple=pie;starfruit;orange=marmalade';
-    matrixArray = [{red: 'ted', blue: 2, orange: undefined}, {apple: 'pie', starfruit: undefined, orange: 'marmalade'}]
+    matrixArray = [{red: 'ted', blue: 2, orange: undefined}, {apple: 'pie', starfruit: undefined, orange: 'marmalade'}];
   
     it('returns an empty string when called with no arguments', function() {
       expect(utils.buildMatrixURI()).toBe('');
