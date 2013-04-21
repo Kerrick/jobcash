@@ -11,6 +11,21 @@ namespace :compile do
     check_dirs %w[css sass]
     sh 'sass --update sass:css --style compressed --force', verbose: false
   end
+
+  desc 'Compile coffeescript in the coffee/ directory into JS for production'
+  task :coffee do
+    require 'coffee_script'
+    check_dirs %w[coffee spec]
+    files = FileList['coffee/**/*.coffee']
+    code = ''
+    files.each do |file|
+      code << File.read(file)
+    end
+    File.open 'app.js', 'w' do |file|
+      file.write CoffeeScript.compile(code, bare: true)
+    end
+    puts 'Wrote app.js'
+  end
 end
 
 namespace :dev do
@@ -25,17 +40,9 @@ namespace :dev do
     sh 'bundle exec rackup -p 8925', verbose: false
   end
 
-  desc 'Lint JavaScript files using JSHint'
-  require 'jshintrb/jshinttask'
-  Jshintrb::JshintTask.new :lint do |task|
-    task.pattern = '**/*.js'
-    task.exclude_pattern = 'vendor/**/*.js'
-    task.options = :defaults
-  end
-
   desc 'Watch all assets to compile on changes (development)'
   task :watch do
-    WATCHERS = [:sass]
+    WATCHERS = [:sass, :coffee]
     begin
       threads = []
       WATCHERS.each do |name|
@@ -59,6 +66,14 @@ namespace :dev do
       check_dirs %w[css sass]
       on_change_of_folder 'sass' do
         sh 'sass --update sass:css --style expanded --line-numbers --line-comments', verbose: false
+      end
+    end
+
+    desc 'Watch only coffeescript in the coffee/ directory'
+    task :coffee do
+      on_change_of_folder 'coffee' do
+        Rake::Task['compile:coffee'].reenable
+        Rake::Task['compile:coffee'].invoke
       end
     end
   end
