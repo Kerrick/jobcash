@@ -5,37 +5,48 @@ CLOBBER.include 'app.js', 'css/'
 task default: 'compile'
 
 desc 'Compile all assets (production)'
-multitask compile: ['compile:sass', 'compile:coffee'] do
+multitask compile: ['compile:sass', 'compile:app.js'] do
   puts "Compiled all assets using production settings."
 end
 
 namespace :compile do
-  desc 'Compile the sass/ directory into CSS for production'
+  desc 'Compile the sass/ directory into CSS in the css/ directory'
   task :sass do
     check_dirs %w[css sass]
     sh 'sass --update sass:css --style compressed --force', verbose: false
   end
 
-  desc 'Compile coffeescript in the coffee/ directory into JS for production'
-  task :coffee do
+  desc 'Compile the coffee/ and templates/ directories into app.js'
+  task 'app.js' do
     require 'coffee_script'
-    check_dirs %w[coffee spec]
-    files = FileList['coffee/**/*.coffee']
-    code = ''
-    files.each do |file|
-      code << File.read(file)
+    coffee_files = FileList['coffee/**/*.coffee']
+    handlebars_files = FileList['templates/**/*.handlebars']
+    appjs = ''
+
+    coffee_files.each do |file|
+      appjs << File.read(file)
     end
-    File.open 'app.js', 'w' do |file|
-      file.write CoffeeScript.compile(code, bare: true)
+
+    appjs = CoffeeScript.compile appjs, bare: true
+
+    handlebars_files.each do |file|
+      appjs << "\nEmber.TEMPLATES['#{ File.basename file, '.handlebars' }'] = Ember.Handlebars.compile('\\"
+      File.new(file).each_line do |line|
+        appjs << line.gsub("\n", "\\\n").gsub("'", "\\'") unless line.chomp.empty?
+      end
+      appjs << "');\n"
     end
-    puts 'Wrote app.js'
+
+    File.open('app.js', 'w') { |file| puts '  wrote app.js' if file.write appjs }
   end
 end
 
 namespace :dev do
   desc 'Initialize development -- do this after a git clone!'
-  task init: ['compile'] do
+  task :init do
     sh 'bundle exec bourbon install --path=vendor'
+    Rake::Task['compile'].reenable
+    Rake::Task['compile'].invoke
   end
 
   desc 'Start the server at http://localhost:8925/'
@@ -46,7 +57,7 @@ namespace :dev do
 
   desc 'Watch all assets to compile on changes (development)'
   task :watch do
-    WATCHERS = [:sass, :coffee]
+    WATCHERS = [:sass, :coffee, :templates]
     begin
       threads = []
       WATCHERS.each do |name|
@@ -65,7 +76,7 @@ namespace :dev do
   end
 
   namespace :watch do
-    desc 'Watch the only the sass/ directory'
+    desc 'Watch only the sass/ directory'
     task :sass do
       check_dirs %w[css sass]
       on_change_of_folder 'sass' do
@@ -73,11 +84,17 @@ namespace :dev do
       end
     end
 
-    desc 'Watch only coffeescript in the coffee/ directory'
+    desc 'Watch only the coffee/ directory'
     task :coffee do
       on_change_of_folder 'coffee' do
-        Rake::Task['compile:coffee'].reenable
-        Rake::Task['compile:coffee'].invoke
+        Rake::Task['compile:app.js'].execute
+      end
+    end
+
+    desc 'Watch only the templates/ directory'
+    task :templates do
+      on_change_of_folder 'templates' do
+        Rake::Task['compile:app.js'].execute
       end
     end
   end

@@ -1,5 +1,4 @@
-Ember.TEMPLATES['job'] = Ember.Handlebars.compile('
-<h2>Job</h2>
+<h2>Comparison</h2>
 <table>
   <thead>
     <tr>
@@ -9,12 +8,13 @@ Ember.TEMPLATES['job'] = Ember.Handlebars.compile('
     </tr>
   </thead>
   <tbody>
+  {{#each controller}}
     <tr>
       <th scope="row">{{#linkTo job this}}{{title}}{{/linkTo}}</th>
       <td>{{salary}}</td>
       <td>{{401k}}</td>
     </tr>
+  {{/each}}
   </tbody>
 </table>
-')
 
