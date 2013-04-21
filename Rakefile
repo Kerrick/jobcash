@@ -40,14 +40,6 @@ namespace :dev do
     sh 'bundle exec rackup -p 8925', verbose: false
   end
 
-  desc 'Lint JavaScript files using JSHint'
-  require 'jshintrb/jshinttask'
-  Jshintrb::JshintTask.new :lint do |task|
-    task.pattern = '**/*.js'
-    task.exclude_pattern = 'vendor/**/*.js'
-    task.options = :defaults
-  end
-
   desc 'Watch all assets to compile on changes (development)'
   task :watch do
     WATCHERS = [:sass, :coffee]
