@@ -130,6 +130,11 @@ App.ComparisonRoute = Ember.Route.extend({
     }
     return _results;
   },
+  redirect: function(model) {
+    if (model.length === 1) {
+      return this.transitionTo('job', model[0]);
+    }
+  },
   serialize: function(model) {
     return {
       jobs: utils.buildMatrixURI.apply(model)

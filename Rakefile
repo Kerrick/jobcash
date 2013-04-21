@@ -1,7 +1,7 @@
 task default: 'compile'
 
 desc 'Compile all assets (production)'
-multitask compile: ['compile:sass'] do
+multitask compile: ['compile:sass', 'compile:coffee'] do
   puts "Compiled all assets using production settings."
 end
 
