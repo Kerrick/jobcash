@@ -6,60 +6,10 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-
-    <script type="text/x-handlebars">
-      <h1>{{#linkTo 'index'}}{{App.NAME}}{{/linkTo}}</h1>
-      <p>{{App.NAME}} v{{App.VERSION}}</p>
-      {{outlet}}
-    </script>
-
-    <script type="text/x-handlebars" id="job">
-      <h2>Job</h2>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Job</th>
-            <th scope="col">Salary</th>
-            <th scope="col">401k Match</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">{{#linkTo job this}}{{title}}{{/linkTo}}</th>
-            <td>{{salary}}</td>
-            <td>{{401k}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </script>
-
-    <script type="text/x-handlebars" id="comparison">
-      <h2>Comparison</h2>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Job</th>
-            <th scope="col">Salary</th>
-            <th scope="col">401k Match</th>
-          </tr>
-        </thead>
-        <tbody>
-        {{#each controller}}
-          <tr>
-            <th scope="row">{{#linkTo job this}}{{title}}{{/linkTo}}</th>
-            <td>{{salary}}</td>
-            <td>{{401k}}</td>
-          </tr>
-        {{/each}}
-        </tbody>
-      </table>
-    </script>
-
     <script src="/vendor/jquery.js"></script>
     <script src="/vendor/handlebars.js"></script>
     <script src="/vendor/ember.js"></script>
     <script src="/vendor/accounting.js"></script>
     <script src="/app.js"></script>
-
   </body>
 </html>
