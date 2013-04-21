@@ -1,3 +1,4 @@
 vendor/bourbon/
 *.swp
 .sass-cache/
+*~

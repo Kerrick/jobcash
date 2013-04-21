@@ -2,46 +2,8 @@ var App, utils,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
 
-App = Ember.Application.create({
-  VERSION: '0.1.0',
-  NAME: 'Jobcash',
-  LOG_TRANSITIONS: true
-});
-
-Ember.Application.initializer({
-  name: 'versions',
-  initialize: function() {
-    Ember.debug("Accounting.VERSION : " + accounting.version);
-    Ember.debug("" + App.NAME + ".VERSION : " + App.VERSION);
-    return Ember.debug('-------------------------------');
-  }
-});
-
 utils = function() {
   return true;
-};
-
-utils.parseMatrixURI = function(uri) {
-  var matrices, pair, pairs, params, part, parts, split, value, _i, _j, _len, _len1;
-
-  matrices = [];
-  parts = uri.split('&');
-  for (_i = 0, _len = parts.length; _i < _len; _i++) {
-    part = parts[_i];
-    pairs = part.split(';');
-    params = {};
-    for (_j = 0, _len1 = pairs.length; _j < _len1; _j++) {
-      pair = pairs[_j];
-      split = pair.split('=');
-      value = split[1];
-      if (!isNaN(value)) {
-        value = +value;
-      }
-      params[split[0]] = value;
-    }
-    matrices.push(params);
-  }
-  return matrices;
 };
 
 utils.buildMatrixURI = function() {
@@ -82,6 +44,56 @@ utils.chomp = function(wholeString, chompString) {
   }
 };
 
+utils.parseMatrixURI = function(uri) {
+  var matrices, pair, pairs, params, part, parts, split, value, _i, _j, _len, _len1;
+
+  matrices = [];
+  parts = uri.split('&');
+  for (_i = 0, _len = parts.length; _i < _len; _i++) {
+    part = parts[_i];
+    pairs = part.split(';');
+    params = {};
+    for (_j = 0, _len1 = pairs.length; _j < _len1; _j++) {
+      pair = pairs[_j];
+      split = pair.split('=');
+      value = split[1];
+      if (!isNaN(value)) {
+        value = +value;
+      }
+      params[split[0]] = value;
+    }
+    matrices.push(params);
+  }
+  return matrices;
+};
+
+App = Ember.Application.create({
+  VERSION: '0.1.0',
+  NAME: 'Jobcash',
+  LOG_TRANSITIONS: true
+});
+
+Ember.Application.initializer({
+  name: 'versions',
+  initialize: function() {
+    Ember.debug("Accounting.VERSION : " + accounting.version);
+    Ember.debug("" + App.NAME + ".VERSION : " + App.VERSION);
+    return Ember.debug('-------------------------------');
+  }
+});
+
+App.ComparisonController = Ember.ArrayController.extend({
+  itemController: 'job'
+});
+
+App.JobController = Ember.ObjectController.extend({
+  salary: (function() {
+    return accounting.formatMoney(this.get('content.salary'));
+  }).property('content.salary')
+});
+
+App.Job = Ember.Object.extend();
+
 App.Router = Ember.Router.extend({
   location: 'history'
 });
@@ -95,8 +107,6 @@ App.Router.map(function() {
   });
 });
 
-App.Job = Ember.Object.extend();
-
 App.JobRoute = Ember.Route.extend({
   model: function(params) {
     return utils.parseMatrixURI(params.stats)[0];
@@ -106,12 +116,6 @@ App.JobRoute = Ember.Route.extend({
       stats: utils.buildMatrixURI(model)
     };
   }
-});
-
-App.JobController = Ember.ObjectController.extend({
-  salary: (function() {
-    return accounting.formatMoney(this.get('content.salary'));
-  }).property('content.salary')
 });
 
 App.ComparisonRoute = Ember.Route.extend({
@@ -131,8 +135,4 @@ App.ComparisonRoute = Ember.Route.extend({
       jobs: utils.buildMatrixURI.apply(model)
     };
   }
-});
-
-App.ComparisonController = Ember.ArrayController.extend({
-  itemController: 'job'
 });
