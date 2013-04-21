@@ -2,3 +2,5 @@ vendor/bourbon/
 *.swp
 .sass-cache/
 *~
+app.js
+css/

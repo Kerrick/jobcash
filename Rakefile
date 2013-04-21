@@ -1,3 +1,7 @@
+require 'rake/clean'
+
+CLOBBER.include 'app.js', 'css/'
+
 task default: 'compile'
 
 desc 'Compile all assets (production)'
@@ -30,12 +34,12 @@ end
 
 namespace :dev do
   desc 'Initialize development -- do this after a git clone!'
-  task :init do
+  task init: ['compile'] do
     sh 'bundle exec bourbon install --path=vendor'
   end
 
   desc 'Start the server at http://localhost:8925/'
-  task :server do
+  task server: ['compile'] do
     puts 'Starting server at http://localhost:8925/ now...'
     sh 'bundle exec rackup -p 8925', verbose: false
   end
