@@ -1,5 +1,5 @@
 App.JobController = Ember.ObjectController.extend
-  prettySalary: ( ->
+  salary: ( ->
     accounting.formatMoney @get('content.salary'), precision: 0
   ).property 'content.salary'
 
