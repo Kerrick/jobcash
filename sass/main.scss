@@ -2,5 +2,11 @@
 @import "vendor/bourbon/bourbon";
 
 body {
-  font-family: $helvetica
+  font-family: $helvetica;
 }
+
+dt.monthly:after {
+  content: " (monthly)";
+  color: grey;
+}
+
